@@ -14,7 +14,26 @@ def choose(choice):
         choose(choice)
 
 def most_popular_articles():
-    pass
+    conn = psycopg2.connect(database=DBNAME)
+    c = conn.cursor()
+
+    c.execute("""
+    SELECT articles.slug,
+           articles.title,
+           count(log.path) AS count
+    FROM   articles
+    JOIN log
+      ON log.path LIKE concat('%',articles.slug,'%')
+    GROUP BY articles.slug, articles.title
+    order BY count DESC
+    LIMIT 3;
+    """)
+
+    answer = c.fetchall()
+    conn.close()
+
+    for x in answer:
+        print('-> ', x[1])
 
 def most_popular_authors():
     pass
