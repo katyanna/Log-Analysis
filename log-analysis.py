@@ -18,14 +18,7 @@ def most_popular_articles():
     c = conn.cursor()
 
     c.execute("""
-    SELECT articles.slug,
-           articles.title,
-           count(log.path) AS count
-    FROM   articles
-    JOIN log
-      ON log.path LIKE concat('%',articles.slug,'%')
-    GROUP BY articles.slug, articles.title
-    order BY count DESC
+    SELECT * FROM articles_popularity
     LIMIT 3;
     """)
 
@@ -36,7 +29,24 @@ def most_popular_articles():
         print('{} - {} '.format(i, x[1]))
 
 def most_popular_authors():
-    pass
+    conn = psycopg2.connect(database=DBNAME)
+    c = conn.cursor()
+
+    c.execute("""
+    SELECT SUM(articles_popularity.count) AS views,
+            authors.name
+    FROM authors
+    JOIN articles_popularity
+        ON authors.id = articles_popularity.author
+    GROUP BY authors.name
+    ORDER BY views DESC;
+    """)
+
+    answer = c.fetchall()
+    conn.close()
+
+    for i, x in enumerate(answer, start = 1):
+        print('{} - {} '.format(i, x[1]))
 
 def days_with_more_errors():
     pass
