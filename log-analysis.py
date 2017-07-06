@@ -32,8 +32,8 @@ def most_popular_articles():
     answer = c.fetchall()
     conn.close()
 
-    for x in answer:
-        print('-> ', x[1])
+    for i, x in enumerate(answer, start = 1):
+        print('{} - {} '.format(i, x[1]))
 
 def most_popular_authors():
     pass
