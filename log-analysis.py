@@ -26,8 +26,8 @@ def answer(query):
     answer = c.fetchall()
     conn.close()
 
-    for i, x in enumerate(answer, start = 1):
-        print('{} - {}'.format(i, x[1]))
+    for x in answer:
+        print(x[0], ' - ',x[1])
 
 if __name__ == '__main__':
     print("\n[1] What are the most popular three articles of all time?")
