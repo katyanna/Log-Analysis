@@ -1,0 +1,15 @@
+python3 log-analysis.py
+
+[1] What are the most popular three articles of all time?
+342102  -  Candidate is jerk, alleges rival
+256365  -  Bears love berries, alleges bear
+171762  -  Bad things gone, say good people
+
+[2] Who are the most popular article authors of all time?
+512805  -  Ursula La Multa
+427781  -  Rudolf von Treppenwitz
+171762  -  Anonymous Contributor
+85387  -  Markoff Chaney
+
+[3] On which days did more than 1% of requests lead to errors?
+2016-07-17  -  2.26
