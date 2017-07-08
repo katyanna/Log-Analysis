@@ -1,65 +1,40 @@
 import psycopg2
+import pdb
 
 DBNAME = 'news'
 
-def choose(choice):
-    if choice == '1':
-        most_popular_articles()
-    elif choice == '2':
-        most_popular_authors()
-    elif choice == '3':
-        days_with_more_errors()
-    else:
-        choice = input('Enter only the number of your question: ')
-        choose(choice)
+most_popular_articles = "SELECT * FROM articles_popularity LIMIT 3;"
 
-def most_popular_articles():
+most_popular_authors = """
+                        SELECT SUM(articles_popularity.count) AS views,
+                                authors.name
+                        FROM authors
+                        JOIN articles_popularity
+                            ON authors.id = articles_popularity.author
+                        GROUP BY authors.name
+                        ORDER BY views DESC;
+                        """
+
+days_with_more_errors = "SELECT * FROM errors WHERE errors_percentage > 1"
+
+def answer(query):
     conn = psycopg2.connect(database=DBNAME)
     c = conn.cursor()
 
-    c.execute("""
-    SELECT * FROM articles_popularity
-    LIMIT 3;
-    """)
+    c.execute(query)
 
     answer = c.fetchall()
     conn.close()
 
     for i, x in enumerate(answer, start = 1):
-        print('{} - {} '.format(i, x[1]))
-
-def most_popular_authors():
-    conn = psycopg2.connect(database=DBNAME)
-    c = conn.cursor()
-
-    c.execute("""
-    SELECT SUM(articles_popularity.count) AS views,
-            authors.name
-    FROM authors
-    JOIN articles_popularity
-        ON authors.id = articles_popularity.author
-    GROUP BY authors.name
-    ORDER BY views DESC;
-    """)
-
-    answer = c.fetchall()
-    conn.close()
-
-    for i, x in enumerate(answer, start = 1):
-        print('{} - {} '.format(i, x[1]))
-
-def days_with_more_errors():
-    pass
+        print('{} - {}'.format(i, x[1]))
 
 if __name__ == '__main__':
-    options = """
-    [1] What are the most popular three articles of all time?
-    [2] Who are the most popular article authors of all time?
-    [3] On which days did more than 1% of requests lead to errors?
-    """
+    print("\n[1] What are the most popular three articles of all time?")
+    answer(most_popular_articles)
 
-    print(options)
+    print("\n[2] Who are the most popular article authors of all time?")
+    answer(most_popular_authors)
 
-    choice = input('Enter the number of your question [1-2-3]: ')
-
-    choose(choice)
+    print("\n[3] On which days did more than 1% of requests lead to errors?")
+    answer(days_with_more_errors)
