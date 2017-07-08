@@ -1,5 +1,5 @@
 ### Log Analysis
-The third project for the Udacity Full Stack Nanodegree.
+A project for the Udacity Full Stack Nanodegree. The project is to build an internal reporting tool that will use information from the database to discover what kind of articles the site's readers like
 
 #### What you'll need:
 1. Install [Vagrant](https://www.vagrantup.com/) and [VirtualBox](https://www.virtualbox.org/)
